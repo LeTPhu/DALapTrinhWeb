@@ -1,0 +1,84 @@
+﻿@using DoAnLTWeb.Models;
+@model DoAnLTWeb.Models.TaiKhoan
+@{
+    ViewBag.Title = "Thêm thành viên mới";
+}
+<style>
+    .content form {
+        padding: 15px 20px 20px 20px;
+        background-color: #fff;
+        display: block;
+        margin-top: 0em;
+        margin: auto;
+        width: 500px;
+    }
+
+    .login-title {
+        margin-bottom: 25px;
+        margin-top: 20px;
+        text-align: center;
+    }
+</style>
+<div class="bg-silver-300">
+    @{
+        if (ViewBag.usc != null)
+        {
+            <p class="alert alert-warning">@ViewBag.usc</p>
+        }
+    }
+    <div class="content">
+        @using (Html.BeginForm("ThemTV", "TaiKhoan", FormMethod.Post, new { id = "register-form", novalidate = "novalidate" }))
+        {<h2 class="login-title">Tạo tài khoản</h2>
+            <div class="row">
+                <div class="col-6">
+                    <div class="form-group">
+                        @Html.TextBoxFor(m => m.hoDem, new { @class = "form-control", placeholder = "Họ và tên đệm" })
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="form-group">
+                        @Html.TextBoxFor(m => m.tenTV, new { @class = "form-control", placeholder = "Tên" })
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.TextBoxFor(m => m.taiKhoan1, new { @class = "form-control", placeholder = "Username", autocomplete = "off" })
+            </div>
+            <div class="form-group">
+                @Html.TextBoxFor(m => m.soDT, new { @class = "form-control", placeholder = "Số điện thoại", autocomplete = "off" })
+            </div>
+            <div class="form-group">
+                @Html.TextBoxFor(m => m.email, new { @class = "form-control", placeholder = "Email", autocomplete = "off" })
+            </div>
+            <div class="form-group">
+                @Html.TextBoxFor(m => m.diaChi, new { @class = "form-control", placeholder = "Địa chỉ", autocomplete = "off" })
+            </div>
+            <div class="form-group">
+                @Html.TextBoxFor(m => m.ghiChu, new { @class = "form-control", placeholder = "Ghi chú", autocomplete = "off" })
+            </div>
+            <div class="form-group">
+                @Html.TextBoxFor(m => m.ngaysinh, new { @class = "form-control", type = "date" })
+            </div>
+            <div class="form-group">
+                @Html.TextBoxFor(m => m.matKhau, new { @class = "form-control", type = "password", placeholder = "Mật khẩu" })
+            </div>
+            <div class="form-group">
+                @Html.TextBox("xnmk", "", new { @class = "form-control", type = "password", placeholder = "Nhập lại mật khẩu" })
+            </div>
+            <div class="form-group">
+                <button class="btn btn-info btn-block" type="submit">Tạo tài khoản</button>
+            </div>
+        }
+    </div>
+</div>
+<!-- BEGIN PAGA BACKDROPS-->
+<div class="sidenav-backdrop backdrop"></div>
+<div class="preloader-backdrop">
+    <div class="page-preloader">Loading</div>
+</div>
+<!-- END PAGA BACKDROPS-->
+<!-- END PAGE CONTENT-->
+<footer class="page-footer">
+    <div class="font-13">2018 © <b>AdminCAST</b> - All rights reserved.</div>
+    <div class="to-top"><i class="fa fa-angle-double-up"></i></div>
+</footer>

@@ -1,0 +1,197 @@
+﻿@using DoAnLTWeb.Models;
+@{
+    List<SanPham> list = ViewData["list"] as List<SanPham>;
+    ViewBag.Title = "Danh sách sản phẩm";
+}
+<!-- START PAGE CONTENT-->
+<div class="page-heading">
+    <h1 class="page-title">Danh sách sản phẩm @ViewBag.loaiSP</h1>
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+            <a href="@Url.Action("Dashboard","Dashboard")"><i class="la la-home font-20"></i></a>
+        </li>
+    </ol>
+</div>
+<div class="row">
+    <div class="col-lg-3">
+        <div class="hero__categories dropdown">
+            <div class="hero__categories__all">
+                <i class="fa fa-bars"></i>
+                <span>Loại sản phẩm</span>
+            </div>
+            <ul class="dropdown-menu">
+                    <li><a href="@Url.Action("DSSanPham","SanPham")">Tất cả</a></li>
+                @foreach (LoaiSP i in DataIn.GetListLoaiSP())
+                {
+                    <li>
+                        @using (Html.BeginForm("DSSanPham", "SanPham", FormMethod.Post))
+                        {
+                            <input type="hidden" name="ma" value="@i.maLoai" />
+                            <button type="submit">@i.tenLoai</button>
+                        }
+                    </li>
+                }
+            </ul>
+        </div>
+    </div>
+</div>
+<div class="page-content fade-in-up">
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-12 card">
+                    <!-- /.card-header -->
+                    <div class="card-body">
+                        <table id="example2" class="table table-bordered table-hover font-13">
+                            <thead>
+                                <tr>
+                                    <th>Tên sản phẩm</th>
+                                    <th>Ngày đăng</th>
+                                    <th>Tài khoản</th>
+                                    <th>Giá bán</th>
+                                    <th>Giảm giá (%)</th>
+                                    <th>Trạng thái</th>
+                                    <th>Lệnh - Công cụ</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @{
+                                    if (list != null)
+                                    {
+                                        foreach (SanPham i in list)
+                                        {
+                                            <tr>
+                                                <td><img src="@i.hinhDD" /> @i.tenSP </td>
+                                                @* hh:giờ - mm:Phút - dd:Ngày - MM: Tháng - yyyy:Năm  *@
+                                                <td>@string.Format("{0:hh:mm dd/MM/yyyy}", i.ngayDang)</td>
+                                                @*---TaiKhoan1: Đối tượng tài khoản hay đăng bài *@
+                                                <td>@i.TaiKhoan1.tenTV </td>
+                                                <td>@string.Format("{0:#,##0 VNĐ}", i.giaBan)</td>
+                                                <td>@i.giamGia</td>
+                                                <td>
+                                                    @{if (i.daDuyet == true)
+                                                        {<span class="bg-green">Đang hiện</span> }
+                                                        else
+                                                        {<span class="bg-red">Đã ẩn</span> } }
+                                                </td>
+                                                <td>
+                                                    <div class="text-center ">
+                                                        @using (Html.BeginForm("ActiveSP", "SanPham", FormMethod.Post))
+                                                        {
+                                                            <input type="hidden" name="maSanPham" value="@i.maSP" />
+                                                            <button class="btn-success" title="Ẩn/Hiện bài viết ">
+                                                                @{ if (i.daDuyet == true)
+                                                                    {<i class="fa fa-solid fa-eye-slash"></i>}
+                                                                    else
+                                                                    {<i class="fa fa-solid fa-eye"></i>}}
+                                                            </button>
+                                                        }
+                                                        @using (Html.BeginForm("UpdateSP", "SanPham", FormMethod.Post))
+                                                        {
+                                                            <input type="hidden" name="masp" value="@i.maSP" />
+                                                            <button class="btn-info" title="Chỉnh sửa sản phẩm">
+                                                                <i class="fa fa-wrench" aria-hidden="true"></i>
+                                                            </button>
+                                                        }
+                                                        @using (Html.BeginForm("DeleteSP", "SanPham", FormMethod.Post))
+                                                        {
+                                                            <input type="hidden" name="maSP" value="@i.maSP" />
+                                                            <button class="btn-danger" title="Xóa sản phẩm">
+                                                                <i class="fa fa-trash" aria-hidden="true"></i>
+                                                            </button>
+                                                        }
+                                                    </div>
+                                                </td>
+                                            </tr>
+
+                                        }
+                                    }
+                                    else
+                                    {
+                                        foreach (LoaiSP j in DataIn.GetListLoaiSP())
+                                        {
+                                            <tr>
+                                                <td colspan ="7" class="tenLoai"><b>@j.tenLoai</b></td>
+                                            </tr>
+                                            foreach (SanPham i in DataIn.GetListSPEqualsLoaiSPDaDuyet(j.maLoai))
+                                            {
+                                                <tr>
+                                                    <td><img src="@i.hinhDD" /> @i.tenSP </td>
+                                                    @* hh:giờ - mm:Phút - dd:Ngày - MM: Tháng - yyyy:Năm  *@
+                                                    <td>@string.Format("{0: [dd MMMM yyyy]}", i.ngayDang)</td>
+                                                    @*---TaiKhoan1: Đối tượng tài khoản hay đăng bài *@
+                                                    <td>@i.TaiKhoan1.tenTV </td>
+                                                    <td>@string.Format("{0:#,##0 VNĐ}", i.giaBan)</td>
+                                                    <td>@i.giamGia</td>
+                                                    <td>
+                                                        @{if (i.daDuyet == true)
+                                                            {<span class="bg-green">Đang hiện</span> }
+                                                            else
+                                                            {<span class="bg-red">Đã ẩn</span> } }
+                                                    </td>
+                                                    <td>
+                                                        <div class="text-center ">
+                                                            @using (Html.BeginForm("ActiveSP", "SanPham", FormMethod.Post))
+                                                            {
+                                                                <input type="hidden" name="maSanPham" value="@i.maSP" />
+                                                                <button class="btn-success" title="Ẩn/Hiện bài viết ">
+                                                                    @{ if (i.daDuyet == true)
+                                                                        {<i class="fa fa-solid fa-eye-slash"></i>}
+                                                                        else
+                                                                        {<i class="fa fa-solid fa-eye"></i>}}
+                                                                </button>
+                                                            }
+                                                            @using (Html.BeginForm("UpdateSP", "SanPham", FormMethod.Post))
+                                                            {
+                                                                <input type="hidden" name="masp" value="@i.maSP" />
+                                                                <button class="btn-info" title="Chỉnh sửa sản phẩm">
+                                                                    <i class="fa fa-wrench" aria-hidden="true"></i>
+                                                                </button>
+                                                            }
+                                                            @using (Html.BeginForm("DeleteSP", "SanPham", FormMethod.Post))
+                                                            {
+                                                                <input type="hidden" name="maSP" value="@i.maSP" />
+                                                                <button class="btn-danger" title="Xóa sản phẩm">
+                                                                    <i class="fa fa-trash" aria-hidden="true"></i>
+                                                                </button>
+                                                            }
+                                                        </div>
+                                                    </td>
+                                                </tr>
+
+                                            }
+
+                                        }
+                                    }
+                                }
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <th>Tên sản phẩm</th>
+                                    <th>Ngày đăng</th>
+                                    <th>Tài khoản</th>
+                                    <th>Giá bán</th>
+                                    <th>Giảm giá (%)</th>
+                                    <th>Trạng thái</th>
+                                    <th>Lệnh - Công cụ</th>
+                                </tr>
+                            </tfoot>
+                        </table>
+                        <div class="row"><div class="col-sm-12 col-md-5"><div class="dataTables_info" id="example2_info" role="status" aria-live="polite">Showing 1 to 10 of 57 entries</div></div><div class="col-sm-12 col-md-7"><div class="dataTables_paginate paging_simple_numbers" id="example2_paginate"><ul class="pagination"><li class="paginate_button page-item previous disabled" id="example2_previous"><a href="#" aria-controls="example2" data-dt-idx="0" tabindex="0" class="page-link">Previous</a></li><li class="paginate_button page-item active"><a href="#" aria-controls="example2" data-dt-idx="1" tabindex="0" class="page-link">1</a></li><li class="paginate_button page-item "><a href="#" aria-controls="example2" data-dt-idx="2" tabindex="0" class="page-link">2</a></li><li class="paginate_button page-item "><a href="#" aria-controls="example2" data-dt-idx="3" tabindex="0" class="page-link">3</a></li><li class="paginate_button page-item "><a href="#" aria-controls="example2" data-dt-idx="4" tabindex="0" class="page-link">4</a></li><li class="paginate_button page-item "><a href="#" aria-controls="example2" data-dt-idx="5" tabindex="0" class="page-link">5</a></li><li class="paginate_button page-item "><a href="#" aria-controls="example2" data-dt-idx="6" tabindex="0" class="page-link">6</a></li><li class="paginate_button page-item next" id="example2_next"><a href="#" aria-controls="example2" data-dt-idx="7" tabindex="0" class="page-link">Next</a></li></ul></div></div></div>
+                    </div>
+                    <!-- /.card-body -->
+                </div>
+                <!-- /.col -->
+            </div>
+            <!-- /.row -->
+        </div>
+        <!-- /.container-fluid -->
+    </section>
+</div>
+<!-- END PAGE CONTENT-->
+<footer class="page-footer">
+    <div class="font-13">2018 © <b>AdminCAST</b> - All rights reserved.</div>
+    <a class="px-4" href="http://themeforest.net/item/adminca-responsive-bootstrap-4-3-angular-4-admin-dashboard-template/20912589" target="_blank">BUY PREMIUM</a>
+    <div class="to-top"><i class="fa fa-angle-double-up"></i></div>
+</footer>
+

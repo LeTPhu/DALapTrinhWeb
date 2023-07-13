@@ -1,0 +1,119 @@
+﻿@using DoAnLTWeb.Models;
+@*@using PagedList.Mvc;
+@model PagedList.IPagedList<DonHang>*@
+@model DoAnLTWeb.Models.DonHang
+@{
+    ViewBag.Title = "Danh sách đơn hàng";
+}
+@*<style>
+    .thunho {
+        font-size: smaller;
+    }
+</style>*@
+<!-- START PAGE CONTENT-->
+<div class="page-heading">
+    <h1 class="page-title">
+        DANH SÁCH ĐƠN HÀNG ĐÃ KÍCH HOẠT
+    </h1>
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+            <a href="@Url.Action("Dashboard","Dashboard")"><i class="la la-home font-20"></i></a>
+        </li>
+    </ol>
+</div>
+<div class="page-content fade-in-up">
+    <div class="ibox">
+        <div class="ibox-body">
+            <table class="table table-bordered table-hover" id="example-table" cellspacing="0" width="100%">
+                <thead>
+                    <tr>
+                        <th>Đơn hàng</th>
+                        <th style="width:11%">Tên khách hàng</th>
+                        <th>Tài khoản</th>
+                        <th style="width:10%">Ngày đặt</th>
+                        <th style="width:10%">Ngày giao</th>
+                        <th style="width:15%">Địa chỉ</th>
+                        <th>Ghi chú GH</th>
+                        <th>Trạng thái</th>
+                        <th>Nhóm lệnh</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+                        foreach (DonHang i in DataIn.NhanDHDaKichHoat())
+                        {
+                            <tr>
+                                <td>@i.soDH </td>
+                                <td>@i.KhachHang.tenKH</td>
+                                <td>@i.TaiKhoan1.tenTV</td>
+                                <td>@string.Format("{0:hh:mm dd/MM/yyyy}", i.ngayDat)</td>
+                                <td>@string.Format("{0:hh:mm dd/MM/yyyy}", i.ngayGH)</td>
+                                <td>@i.diaChiGH</td>
+                                <td>@i.ghiChu</td>
+                                <td>
+                                    @{
+                                        if (i.trangThai != null && i.trangThai.Equals("TC"))
+                                        {
+                                            <span class="bg-green">Thành công</span>
+                                        }
+                                        else if (i.trangThai != null && i.trangThai.Equals("HUY"))
+                                        {
+                                            <span class="bg-red">Đã hủy</span>
+                                        }
+                                    }
+                                </td>
+                                <td>
+                                    @using (Html.BeginForm("chiTiet", "DonHang", FormMethod.Post))
+                                    {
+                                        <input type="hidden" name="maDH" value=" @i.soDH" />
+                                        <button class="btn-primary">Xem chi tiết</button>
+                                    }
+                                    @using (Html.BeginForm("TC", "DonHang", FormMethod.Post))
+                                    {
+                                        <input type="hidden" name="maDH" value=" @i.soDH" />
+                                        <button class=" btn-success">
+                                            <i class="fa fa-solid fa-check"></i>
+                                        </button>
+                                    }
+                                    @using (Html.BeginForm("HUY", "DonHang", FormMethod.Post))
+                                    {
+                                        <input type="hidden" name="maDH" value=" @i.soDH" />
+                                        <button class=" btn-warning">
+                                            <i class="fa fa-solid fa-ban"></i>
+                                        </button>
+                                    }
+                                </td>
+                            </tr>
+                        }
+
+                    }
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <th>Đơn hàng</th>
+                        <th>Tên khách hàng</th>
+                        <th>Tài khoản</th>
+                        <th style="width:10%">Ngày đặt</th>
+                        <th style="width:10%">Ngày giao</th>
+                        <th style="width:15%">Địa chỉ</th>
+                        <th>Ghi chú GH</th>
+                        <th>Ghi chú</th>
+                        <th>Nhóm lệnh</th>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>
+</div>
+@*Trang @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) / @Model.PageCount
+
+@Html.PagedListPager(Model, page => Url.Action("DSDonHang",
+    new { page }))*@
+@*Add đơn hàng*@
+
+
+<!-- END PAGE CONTENT-->
+<footer class="page-footer">
+    <div class="font-13">2018 © <b>AdminCAST</b> - All rights reserved.</div>
+    <div class="to-top"><i class="fa fa-angle-double-up"></i></div>
+</footer>

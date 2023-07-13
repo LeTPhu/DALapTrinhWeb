@@ -1,0 +1,246 @@
+﻿@using DoAnLTWeb.Models;
+@{
+    SanPham SP = ViewData["sp"] as SanPham;
+    ViewBag.Title = "Chi tiết sản phẩm";
+}
+<!-- Hero Section Begin -->
+<section class="hero hero-normal">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-3">
+                <div class="hero__categories">
+                    <div class="hero__categories__all">
+                        <i class="fa fa-bars"></i>
+                        <span>Tất cả danh mục</span>
+                    </div>
+                    <ul>
+                        @{
+                            foreach (LoaiSP i in DataIn.GetListLoaiSP())
+                            {
+                                <li>
+                                    @using (Html.BeginForm("ShopGrid", "Shop", FormMethod.Post))
+                                    {
+                                        <input type="hidden" name="ma" value="@i.maLoai" />
+                                        <button type="submit">@i.tenLoai</button>
+                                    }
+                                </li>
+                            }
+                        }
+                    </ul>
+                </div>
+            </div>
+            <div class="col-lg-9">
+                <div class="hero__search">
+                    <div class="hero__search__form">
+                        <form action="#">
+                            <div class="hero__search__categories">
+                                Tất cả danh mục
+                                <span class="arrow_carrot-down"></span>
+                            </div>
+                            <input type="text" placeholder="What do you need?">
+                            <button type="submit" class="site-btn">SEARCH</button>
+                        </form>
+                    </div>
+                    <div class="hero__search__phone">
+                        <div class="hero__search__phone__icon">
+                            <i class="fa fa-phone"></i>
+                        </div>
+                        <div class="hero__search__phone__text">
+                            <h5>+84 11.188.888</h5>
+                            <span>Hỗ trợ 24/7</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Hero Section End -->
+<!-- Breadcrumb Section Begin -->
+<section class="breadcrumb-section set-bg" data-setbg="../Assets/img/breadcrumb.jpg">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12 text-center">
+                <div class="breadcrumb__text">
+                    <h2>Thông tin chi tiết</h2>
+                    <div class="breadcrumb__option">
+                        <a href="@Url.Action("Index","Home")">Home</a>
+                        <a href="@Url.Action("ShopGrid","Shop")">Shop</a>
+                        <span>Thông tin chi tiết</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Breadcrumb Section End -->
+<!-- Product Details Section Begin -->
+<section class="product-details spad">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-6 col-md-6">
+                <div class="product__details__pic">
+                    <div class="product__details__pic__item">
+                        <img class="product__details__pic__item--large"
+                             src="@SP.hinhDD" alt="">
+                    </div>
+                    <div class="product__details__pic__slider owl-carousel">
+                        <img data-imgbigurl="img/product/details/product-details-2.jpg"
+                             src="~/Assets/img/product/details/thumb-1.jpg" alt="">
+                        <img data-imgbigurl="img/product/details/product-details-3.jpg"
+                             src="~/Assets/img/product/details/thumb-2.jpg" alt="">
+                        <img data-imgbigurl="img/product/details/product-details-5.jpg"
+                             src="~/Assets/img/product/details/thumb-3.jpg" alt="">
+                        <img data-imgbigurl="img/product/details/product-details-4.jpg"
+                             src="~/Assets/img/product/details/thumb-4.jpg" alt="">
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6 col-md-6">
+                <div class="product__details__text">
+                    <h3>@SP.tenSP</h3>
+                    <div class="product__details__rating">
+                        <i class="fa fa-star"></i>
+                        <i class="fa fa-star"></i>
+                        <i class="fa fa-star"></i>
+                        <i class="fa fa-star"></i>
+                        <i class="fa fa-star-half-o"></i>
+                        <span>(18 reviews)</span>
+                    </div>
+                    <div class="product__details__price">
+                        @string.Format("{0:#,##0 VNĐ}", SP.giaBan - (SP.giaBan * SP.giamGia / 100))&nbsp;&nbsp;&nbsp;&nbsp;
+                        @{
+                            if (SP.giamGia != 0)
+                            {
+                                <span style="text-decoration-line: line-through">@string.Format("{0:#,##0 VNĐ}", SP.giaBan)</span>
+                            }
+                        }
+                    </div>
+                    <p>
+                        @Html.Raw(@SP.ndTomTat)
+                    </p>
+                    @using (Html.BeginForm("AddToCart","GioHang", FormMethod.Post))
+                    {
+                        <input name ="maSP" type="hidden" value="@SP.maSP" />
+                        <button class="primary-btn">Thêm vào giỏ hàng</button>
+                    }
+                    <a href="#" class="heart-icon"><span class="icon_heart_alt"></span></a>
+                    <ul>
+                        <li><b>Kho</b> <span>Còn nhiều</span></li>
+                        <li><b>Giao hàng</b> <span>Miễn phí. <samp>Mua ngay hôm nay</samp></span></li>
+                        <li><b>Cân nặng</b> <span>0.5 kg</span></li>
+                        <li>
+                            <b>Share on</b>
+                            <div class="share">
+                                <a href="#"><i class="fa fa-facebook"></i></a>
+                                <a href="#"><i class="fa fa-twitter"></i></a>
+                                <a href="#"><i class="fa fa-instagram"></i></a>
+                                <a href="#"><i class="fa fa-pinterest"></i></a>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+        </div>
+            <div class="col-lg-12">
+                <div class="product__details__tab">
+                    <ul class="nav nav-tabs" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link active" data-toggle="tab" href="#tabs-1" role="tab"
+                               aria-selected="true">Sản phẩm</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" data-toggle="tab" href="#tabs-2" role="tab"
+                               aria-selected="false">Tin tức</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" data-toggle="tab" href="#tabs-3" role="tab"
+                               aria-selected="false">Reviews <span>(1)</span></a>
+                        </li>
+                    </ul>
+                    <div class="tab-content">
+                        <div class="tab-pane active" id="tabs-1" role="tabpanel">
+                            <div class="product__details__tab__desc">
+                                <h6>Về sản phẩm</h6>
+                                <p>@Html.Raw(@SP.noiDung)</p>
+                                
+
+                            </div>
+                        </div>
+                        <div class="tab-pane" id="tabs-2" role="tabpanel">
+                            <div class="product__details__tab__desc">
+                                <h6>Tin tức</h6>
+                                <p>
+                                    Trái cây và rau quả là nguồn cung cấp vitamin và khoáng chất dồi dào, bao gồm folate, vitamin C và kali.
+                                </p>
+                                <p>
+                                    Chúng là nguồn cung cấp chất xơ tuyệt vời, có thể giúp duy trì đường ruột khỏe mạnh và ngăn ngừa táo bón cũng như các vấn đề tiêu hóa khác. Chế độ ăn giàu chất xơ cũng có thể làm giảm nguy cơ ung thư ruột.
+                                </p>
+                                <p>
+                                    Chúng có thể giúp giảm nguy cơ mắc bệnh tim, đột quỵ và một số loại ung thư.
+                                </p>
+                                <p>
+                                    Trái cây và rau quả góp phần tạo nên một chế độ ăn uống cân bằng và lành mạnh.
+                                </p>
+                                <p>
+                                    Trái cây và rau có vị thơm ngon và có rất nhiều loại để lựa chọn.
+                                </p>
+                                <p>
+                                    Trái cây và rau quả cũng thường ít chất béo và calo (miễn là bạn không chiên hoặc nướng chúng với nhiều dầu). Đó là lý do tại sao ăn chúng có thể giúp bạn duy trì cân nặng hợp lý và giữ cho trái tim khỏe mạnh.
+                                </p>
+                                <p>
+                                    Để tận dụng tối đa phần ăn của bạn nên bao gồm nhiều loại trái cây và rau quả. Điều này là do các loại trái cây và rau quả khác nhau có chứa sự kết hợp khác nhau của chất xơ, vitamin, khoáng chất và các chất dinh dưỡng khác.
+                                </p>
+                            </div>
+                        </div>
+                        <div class="tab-pane" id="tabs-3" role="tabpanel">
+                            <div class="product__details__tab__desc">
+                                <h6>Giới thiệu</h6>
+                                <p>
+                                    @Html.Raw(@SP.noiDung)
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+    </div>
+</section>
+<!-- Product Details Section End -->
+<!-- Related Product Section Begin -->
+<section class="related-product">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="section-title related__product__title">
+                    <h2>Related Product</h2>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            @{
+                    foreach (SanPham x in DataIn.GetListSP().Take(8))
+                    {
+                    <div class="col-lg-3 col-md-4 col-sm-6">
+                        <div class="product__item">
+                            <div class="product__item__pic set-bg" data-setbg="..@x.hinhDD">
+                                <ul class="product__item__pic__hover">
+                                    <li><a href="#"><i class="fa fa-heart"></i></a></li>
+                                    <li><a href="#"><i class="fa fa-retweet"></i></a></li>
+                                    <li><a href="#"><i class="fa fa-shopping-cart"></i></a></li>
+                                </ul>
+                            </div>
+                            <div class="product__item__text">
+                                <h6><a href="@Url.Action("ShopDetails","Shop",new {masp=x.maSP})">@x.tenSP</a></h6>
+                                <h5>@string.Format("{0:#,##0 VNĐ}", x.giaBan-(x.giaBan*x.giamGia/100))</h5>
+                                @{if (x.giamGia != 0)
+                                    {<h6 style="text-decoration-line: line-through;color:red">@string.Format("{0:#,##0 VNĐ}", x.giaBan)</h6>}}
+                            </div>
+                        </div>
+                    </div>
+      
+                    }
+                }
+        </div>
+    </div>
+</section>
+<!-- Related Product Section End -->

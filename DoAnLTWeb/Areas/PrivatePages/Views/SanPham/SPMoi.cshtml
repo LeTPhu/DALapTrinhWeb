@@ -1,0 +1,134 @@
+﻿@{
+    ViewBag.Title = "Đăng sản phẩm mới";
+}
+@using DoAnLTWeb.Models
+@model DoAnLTWeb.Models.SanPham
+<!-- START PAGE CONTENT-->
+<div class="page-heading">
+    <h1 class="page-title">ĐĂNG SẢN PHẨM MỚI</h1>
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+            <a href="@Url.Action("Dashboard","Dashboard")"><i class="la la-home font-20"></i></a>
+        </li>
+    </ol>
+</div>
+<div class="page-content fade-in-up">
+    @using (Html.BeginForm("SPMoi", "SanPham", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+        //Html.AntiForgeryToken();
+        <div class="row">
+            <!--Thông tin chính-->
+            <div class="col-md-8">
+                <div class="ibox">
+                    <div class="ibox-head">
+                        <div class="ibox-title">Thông tin chính</div>
+                        <div class="ibox-tools">
+                            <a class="ibox-collapse"><i class="fa fa-minus"></i></a>
+                            <a class="fullscreen-link"><i class="fa fa-expand"></i></a>
+                        </div>
+                    </div>
+                    <div class="ibox-body">
+                        <div class="form-group">
+                            <label>Tên sản phẩm</label>
+                            @Html.TextBoxFor(m => m.tenSP, new { @class = "form-control", type = "text", placeholder = "Nhập tên sản phẩm" })
+                        </div>
+                        <div class="form-group">
+                            <label>Nội dung tóm tắt</label>
+                            @Html.TextAreaFor(m => m.ndTomTat, new { @class = "form-control", type = "text", placeholder = "Enter...", row = 2 })
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-md-6">
+                                <label>Ngày đăng</label>
+                                @Html.TextBoxFor(m => m.ngayDang, new { @class = "form-control", disabled = "disabled" })
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label>Tài khoản</label>
+                                @Html.TextBoxFor(m => m.taiKhoan, new { @class = "form-control", disabled = "disabled" })
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-md-6">
+                                <label>Giá bán</label>
+                                @Html.TextBoxFor(m => m.giaBan, new { @class = "form-control"})
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label>Giảm giá (%)</label>
+                                @Html.TextBoxFor(m => m.giamGia, new { @class = "form-control" })
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-md-6">
+                                <label>Loại sản phẩm</label>
+                                @Html.DropDownListFor(m => m.maLoai, new SelectList(DataIn.GetListLoaiSP(), "maLoai", "tenLoai"), " ", new { @class = "form-control" })
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--End Thông tin chính-->
+            <!--Hình đại diện-->
+            <div class="col-md-4">
+                <div class="ibox">
+                    <div class="ibox-head">
+                        <div class="ibox-title">Hình đại diện</div>
+                        <div class="ibox-tools">
+                            <a class="ibox-collapse"><i class="fa fa-minus"></i></a>
+                            <a class="fullscreen-link"><i class="fa fa-expand"></i></a>
+                        </div>
+                    </div>
+                    <div class="ibox-body">
+                        <div class="form-group row">
+                            @{ if (Model.hinhDD != null)
+                                {
+                                    <img src="@Model.hinhDD" class="img-thumbnail" />
+                                }
+                            }
+                            <div class="col-md-12">
+                                <label for="exampleInputFile">File input</label>
+                                <div class="input-group">
+                                    <div class="custom-file">
+                                        <input type="file" class="custom-file-input" id="exampleInputFile" name="HinhDaiDien">
+                                        <label class="custom-file-label" for="exampleInputFile">Choose File</label>
+                                    </div>
+                                    <div class="input-group-append">
+                                        <button class="input-group-text" disabled>Upload</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--End hình đại diện-->
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="ibox">
+                    <div class="ibox-head">
+                        <div class="ibox-title">
+                            Nội dung chi tiết
+                        </div>
+                        <div class="ibox-tools">
+                            <a class="ibox-collapse"><i class="fa fa-minus"></i></a>
+                            <a class="fullscreen-link"><i class="fa fa-expand"></i></a>
+                        </div>
+                    </div>
+                    <div class="ibox-body">
+                        @Html.TextAreaFor(m => m.noiDung, new { @class = "form-control", id = "editor", rows = 4 })
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--Card Submit-->
+        <div class="form-group ">
+            <button class="btn btn-info" type="submit">Đăng sản phẩm</button>
+        </div>
+        <!--End card Submit-->
+        @Html.HiddenFor(m => m.maSP);
+    }
+</div>
+<!-- END PAGE CONTENT-->
+<footer class="page-footer">
+    <div class="font-13">2018 © <b>AdminCAST</b> - All rights reserved.</div>
+    <div class="to-top"><i class="fa fa-angle-double-up"></i></div>
+</footer>

@@ -1,0 +1,219 @@
+﻿@using DoAnLTWeb.Models;
+@model DoAnLTWeb.Models.KhachHang
+@{
+    ViewBag.Title = "Xác nhận giỏ hàng";
+    Shopcart x = Session["GioHang"] as Shopcart;
+
+}
+<link rel="stylesheet" href="~/Content/main2.css" type="text/css">
+<!-- Hero Section Begin -->
+<section class="hero hero-normal">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-3">
+                <div class="hero__categories">
+                    <div class="hero__categories__all">
+                        <i class="fa fa-bars"></i>
+                        <span>Tất cả danh mục</span>
+                    </div>
+                    <ul>
+                        @foreach (LoaiSP i in DataIn.GetListLoaiSP())
+                        {
+                            <li>
+                                @using (Html.BeginForm("ShopGrid", "Shop", FormMethod.Post))
+                                {
+                                    <input type="hidden" name="ma" value="@i.maLoai" />
+                                    <a><button type="submit">@i.tenLoai</button></a>
+                                }
+                            </li>
+                        }
+                    </ul>
+                </div>
+            </div>
+            <div class="col-lg-9">
+                <div class="hero__search">
+                    <div class="hero__search__form">
+                        <form action="#">
+                            <div class="hero__search__categories">
+                                Tất cả danh mục
+                                <span class="arrow_carrot-down"></span>
+                            </div>
+                            <input type="text" placeholder="What do you need?">
+                            <button type="submit" class="site-btn">SEARCH</button>
+                        </form>
+                    </div>
+                    <div class="hero__search__phone">
+                        <div class="hero__search__phone__icon">
+                            <i class="fa fa-phone"></i>
+                        </div>
+                        <div class="hero__search__phone__text">
+                            <h5>+65 11.188.888</h5>
+                            <span>Hỗ trợ 24/7</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Hero Section End -->
+<!-- Breadcrumb Section Begin -->
+<section class="breadcrumb-section set-bg" data-setbg="../Assets/img/breadcrumb.jpg">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12 text-center">
+                <div class="breadcrumb__text">
+                    <h2>Checkout</h2>
+                    <div class="breadcrumb__option">
+                        <a href="@Url.Action("Index","Home")">Home</a>
+                        <span>Checkout</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Breadcrumb Section End -->
+<!-- Checkout Section Begin -->
+<section class="checkout spad">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                @*<h6>
+                        <span class="icon_tag_alt"></span> Have a coupon? <a href="#">Click here</a> to enter your code
+                    </h6>*@
+                <div class="col-lg-12">
+                    <div class="shoping__cart__table">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th class="shoping__product">Sản phẩm</th>
+                                    <th>Đơn giá</th>
+                                    <th>Số lượng</th>
+                                    <th>Thành tiền</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (CtDonHang i in x.spChon.Values)
+                                {
+                                    <tr>
+                                        <td class="shoping__cart__item">
+                                            <img src="@DataIn.getImageOfProductByID(i.maSP)" alt="">
+                                            <h5>@DataIn.getNameOfProductByID(i.maSP)</h5>
+                                        </td>
+                                        <td class="shoping__cart__price">
+                                            @string.Format("{0:#,##0 VNĐ}", i.giaBan)
+                                        </td>
+                                        <td class="shoping__cart__quantity">
+                                            <div class="quantity">
+                                                <div class="prom-qty">
+                                                    <span class="hiensoluong">@i.soLuong</span>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="shoping__cart__total">
+                                            @string.Format("{0:#,##0 VNĐ}", x.tien1Sp(i))
+                                        </td>
+                                        <td></td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div class="checkout__form">
+            <h4>Chi tiết thanh toán</h4>
+            @using (Html.BeginForm("SaveToData", "GioHang", FormMethod.Post))
+            {
+                <div class="row">
+                    <div class="col-lg-8 col-md-6">
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <div class="checkout__input">
+                                    <p>Họ và Tên<span>*</span></p>
+                                    @Html.TextBoxFor(m => m.tenKH)
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="checkout__input">
+                                    <p>Ngày Sinh<span>*</span></p>
+                                    @Html.TextBoxFor(m => m.ngaySinh, new {type="date"})
+                                </div>
+                            </div>
+                        </div>
+                        <div class="checkout__input">
+                            <p>Địa chỉ<span>*</span></p>
+                            @Html.TextBoxFor(m => m.diaChi, new { placeholder = "Nhập vào địa chỉ", @class = "checkout__input__add" })
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <div class="checkout__input">
+                                    <p>Phone<span>*</span></p>
+                                    @Html.TextBoxFor(m => m.soDT)
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="checkout__input">
+                                    <p>Email<span>*</span></p>
+                                    @Html.TextBoxFor(m => m.email)
+                                </div>
+                            </div>
+                        </div>
+                        @*<p>
+                            Để tiện cho việc đặt hàng lần tới và kiểm tra đơn hàng bạn vui lòng nhập vào mật khẩu bên dưới.
+                            Nếu bạn đã có tài khoản vui lòng nhấn vào <b><i><a href="@Url.Action("Index","Login")">Đăng nhập</a></i></b> (hoặc nhấn vào <b>Đăng nhập</b> ở đầu trang).
+                        </p>
+                        <div class="checkout__input">
+                            <p>Nhập mật khẩu<span>*</span></p>
+                            @Html.TextBoxFor(m => m.matKhau)
+                        </div>*@
+                        <div class="checkout__input">
+                            <p>Ghi chú<span>*</span></p>
+                            @Html.TextBoxFor(m => m.ghiChu, new { placeholder = "Ghi chú về đơn đặt hàng của bạn." })
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-md-6">
+                        <div class="checkout__order">
+                            <h4>Đơn hàng của bạn</h4>
+                            <div class="checkout__order__products">Sản phẩm <span>Thành tiền</span></div>
+                            <div class="row">
+                                <ul>
+                                    @foreach (CtDonHang i in x.spChon.Values)
+                                    {
+
+                                        <li>
+                                            <div class="row">
+                                                <div class="col-md-1"></div>
+                                                <div class="col-md-7 offpading">@DataIn.getNameOfProductByID(i.maSP) </div>
+                                                <div class="col-md-1 offpading"><b>(@i.soLuong)</b></div>
+                                                <div class="col-md-2 offpading">
+                                                    <span>
+                                                        @string.Format("{0:#,##0}", x.tien1Sp(i))
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </li>
+
+                                    }
+                                </ul>
+                            </div>
+                            <div class="checkout__order__subtotal">Tổng tiền (@x.tongSP() Sản phẩm) <span>@string.Format("{0:#,##0 VNĐ}", @x.tongGia())</span></div>
+                            <div class="checkout__order__subtotal">Số tiền đã giảm <span>@string.Format("{0:#,##0 VNĐ}", @x.tienDaGiamGia())</span></div>
+                            <div class="checkout__order__subtotal">Phí giao hàng <span>0 VNĐ</span></div>
+                            <div class="checkout__order__total">Tổng cộng <span>@string.Format("{0:#,##0 VNĐ}", @x.tongTien())</span></div>
+                            <p>
+                                Cảm ơn bạn đã chọn và đặt hàng bên chúng tôi!
+                            </p>
+                            <button type="submit" class="site-btn">Đặt hàng</button>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</section>
+<!-- Checkout Section End -->

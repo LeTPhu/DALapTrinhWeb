@@ -1,0 +1,107 @@
+﻿@using DoAnLTWeb.Models
+@{
+    Layout = null;
+    List<TaiKhoan> list = ViewData["list"] as List<TaiKhoan>;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Admincast bootstrap 4 &amp; angular 5 admin template, Шаблон админки | Login</title>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width initial-scale=1.0">
+    <!-- GLOBAL MAINLY STYLES-->
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/Content/font-awesome.min.css" rel="stylesheet" />
+    <link href="~/Content/themify-icons.css" rel="stylesheet" />
+    <!-- THEME STYLES-->
+    <link href="~/Content/main.min.css" rel="stylesheet" />
+    <!-- PAGE LEVEL STYLES-->
+    <link href="~/Content/auth-light.css" rel="stylesheet" />
+</head>
+<body class="bg-silver-300">
+    <div class="content">
+        <div class="brand">
+            <a class="link" href="#">AdminCAST</a>
+        </div>
+        @using (Html.BeginForm())
+        {
+            Html.AntiForgeryToken();
+            <div id="login-form">
+                <h2>
+                    <a href="@Url.Action("Index","Home")" class=" btn btn-default btn-lg">
+                        <span class="glyphicon glyphicon-home">🏠 Home</span>
+                    </a>
+                    <div class="login-title">Đăng nhập</div>
+
+                </h2>
+                <div class="form-group">
+                    <div class="input-group-icon right">
+                        <div class="input-icon"><i class="fa fa-envelope"></i></div>
+                        @Html.TextBox("name", "", new { @class = "form-control", placeholder = "Username", autocomplete = "off" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="input-group-icon right">
+                        <div class="input-icon"><i class="fa fa-lock font-16"></i></div>
+                        @Html.Password("pass","",new {@class ="form-control", placeholder = "Password" })
+                    </div>
+                </div>
+                <div class="form-group d-flex justify-content-between">
+                    <label class="ui-checkbox ui-checkbox-info">
+                        <input type="checkbox">
+                        <span class="input-span"></span>Remember me.
+                    </label>
+                    <a href="@Url.Action("ForgotPass","Login")">Forgot password?</a>
+                </div>
+                <div class="form-group">
+                    <button class="btn btn-info btn-block" type="submit">Đăng nhập</button>
+                </div>
+                @{ 
+                    if (ViewBag.mess != null)
+                {
+                    <p class="alert alert-warning">@ViewBag.mess</p> 
+                }
+                }
+            </div>
+        }
+    </div>
+    <!-- BEGIN PAGA BACKDROPS-->
+    <div class="sidenav-backdrop backdrop"></div>
+    <div class="preloader-backdrop">
+        <div class="page-preloader">Loading</div>
+    </div>
+    <!-- END PAGA BACKDROPS-->
+    <!-- CORE PLUGINS -->
+    <script src="~/Scripts/jquery.min.js"></script>
+    <script src="~/Scripts/popper.min.js"></script>
+    <script src="~/Scripts/bootstrap.min.js"></script>
+    <!-- PAGE LEVEL PLUGINS -->
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+    <!-- CORE SCRIPTS-->
+    <script src="~/Scripts/app.js"></script>
+    <!-- PAGE LEVEL SCRIPTS-->
+    <script type="text/javascript">
+        $(function () {
+            $('#login-form').validate({
+                errorClass: "help-block",
+                rules: {
+                    email: {
+                        required: true,
+                        email: true
+                    },
+                    password: {
+                        required: true
+                    }
+                },
+                highlight: function (e) {
+                    $(e).closest(".form-group").addClass("has-error")
+                },
+                unhighlight: function (e) {
+                    $(e).closest(".form-group").removeClass("has-error")
+                },
+            });
+        });</script>
+</body>
+
+</html>
